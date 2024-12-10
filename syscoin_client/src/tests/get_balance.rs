@@ -1,8 +1,10 @@
-use crate::client::SyscoinClient;
+use crate::client::{SyscoinClient, MockRpcClient};
 
-#[tokio::test]
-async fn test_get_balance() {
-    let client = SyscoinClient::new("http://localhost:8370", "u", "p", "podaurl/");
-    let balance = client.get_balance().await.unwrap();
-    assert!(balance >= 0.0, "Balance should be non-negative");
+#[test]
+fn test_get_balance() {
+    let mock_client = MockRpcClient;
+    let syscoin_client = SyscoinClient::new(mock_client, "http://mocked_poda_url/");
+
+    let balance = syscoin_client.get_balance().unwrap();
+    assert_eq!(balance, 100.0, "Balance should match mocked value");
 }
